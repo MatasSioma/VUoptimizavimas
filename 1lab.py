@@ -5,8 +5,8 @@ import copy, math
 
 # f(x) = (x^2−a)^2/b−1 -> (x^2)^2/4−1
 def tiklsoF(x):
-    return pow(pow(x, 2), 2) / 3
-    # return pow(pow(x, 2) - 8, 2) / 7 #pvz su kitais a, b
+    # return pow(pow(x, 2), 2) / 3
+    return pow(pow(x, 2) - 8, 2) / 7 #pvz su kitais a, b
 
 while True:
     try:
@@ -48,7 +48,7 @@ def dalijimoPusiau():
             break
 
     print(f"Dalijimo pusiau metodo alogritmas rado atsakymą per {iteracijos} iteracijas.")
-    print(f"su ε = {epsilon}, ats.: {xm}")
+    print(f"su ε = {epsilon}, ats.: {tiklsoF(xm)}")
     pl.plot(xm, tiklsoF(xm), 'or')
 
 def auksinioPjuvio():
