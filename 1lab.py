@@ -67,10 +67,10 @@ def dalijimoPusiau():
         if ilgis < epsilon:
             break
 
+    print()
     print(f"Dalijimo pusiau metodo algoritmas rado atsakymą per {iteracijos} iteracijas.")
     print(f"su ε = {epsilon}, ats.: {fxm}")
     print(f"tiklsoF() buvo iškviestas {f_kvietimai} kartų.")
-    print()
     
     for pt in tarpiniai_t:
         pl.plot(pt[0], pt[1], 'xc')
@@ -126,10 +126,10 @@ def auksinioPjuvio():
     else:
         ats = (x2, fx2)
     
+    print()
     print(f"Auksinio pjūvio metodo algoritmas rado atsakymą per {iteracijos} iteracijas.")
     print(f"su ε = {epsilon}, ats.: {ats[1]}")
     print(f"tiklsoF() buvo iškviestas {f_kvietimai} kartų.")
-    print()
     
     for pt in tarpiniai_t:
         pl.plot(pt[0], pt[1], 'xm')
@@ -170,6 +170,7 @@ def niutonoMetodas():
         
         x = x - fprime / fdouble
     
+    print()
     print(f"Niutono metodo algoritmas rado atsakymą per {iteracijos} iteracijas.")
     print(f"su ε = {epsilon}, ats.: {tarpiniai_t[-1][1]}")
     print(f"tiklsoF() buvo iškviestas {f_kvietimai} kartų, tiklsoF_dx() {fdx_kvietimai} kartų, tiklsoF_2dx() {f2dx_kvietimai} kartų.")
