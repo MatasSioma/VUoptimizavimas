@@ -5,14 +5,14 @@ import copy, math
 
 # f(x) = (x^2−a)^2/b−1 -> (x^2)^2/4−1
 def tiklsoF(x):
-    return (x**4) / 3
+    return (x**4) / 4 - 1
     # return pow(pow(x, 2) - 8, 2) / 7 #pvz su kitais a, b
 
 def tiklsoF_dx(x):
-    return (4 * x**3) / 3
+    return x**3
 
 def tiklsoF_2dx(x):
-    return 4 * x**2
+    return 3 * x**2
 
 while True:
     try:
@@ -27,103 +27,167 @@ while True:
 
 def dalijimoPusiau():
     global intervalas, epsilon
+    f_kvietimai = 0
+
+    def f(x):
+        nonlocal f_kvietimai
+        f_kvietimai += 1
+        return tiklsoF(x)
+    
     l, r = copy.deepcopy(intervalas[0]), copy.deepcopy(intervalas[1])
     xm = (l + r) / 2
     ilgis = r - l
-
+    fxm = f(xm)
+    
     iteracijos = 0
+    tarpiniai_t = []
     while True:
         iteracijos += 1
-
-        fxm = tiklsoF(xm)
+        
         x1 = l + ilgis / 4
         x2 = r - ilgis / 4
-
-        if tiklsoF(x1) < fxm:
+        fx1 = f(x1)
+        fx2 = f(x2)
+        
+        tarpiniai_t.append((xm, fxm))
+        
+        if fx1 < fxm:
             r = xm
             xm = x1
-        elif tiklsoF(x2) < fxm:
+            fxm = fx1
+        elif fx2 < fxm:
             l = xm
             xm = x2
+            fxm = fx2
         else:
             l = x1
             r = x2
-
+        
         ilgis = r - l
         if ilgis < epsilon:
             break
 
-    print(f"Dalijimo pusiau metodo alogritmas rado atsakymą per {iteracijos} iteracijas.")
-    print(f"su ε = {epsilon}, ats.: {tiklsoF(xm)}")
-    pl.plot(xm, tiklsoF(xm), 'or')
+    print(f"Dalijimo pusiau metodo algoritmas rado atsakymą per {iteracijos} iteracijas.")
+    print(f"su ε = {epsilon}, ats.: {fxm}")
+    print(f"tiklsoF() buvo iškviestas {f_kvietimai} kartų.")
+    print()
+    
+    for pt in tarpiniai_t:
+        pl.plot(pt[0], pt[1], 'xc')
+
+    pl.plot(xm, fxm, 'or')
 
 def auksinioPjuvio():
     global intervalas, epsilon
-    l, r = copy.deepcopy(intervalas[0]), copy.deepcopy(intervalas[1])
+    f_kvietimai = 0
 
+    def f(x):
+        nonlocal f_kvietimai
+        f_kvietimai += 1
+        return tiklsoF(x)
+    
+    l, r = copy.deepcopy(intervalas[0]), copy.deepcopy(intervalas[1])
     phi = (math.sqrt(5) - 1) / 2
 
     ilgis = r - l
     x1 = r - phi*ilgis
     x2 = l + phi*ilgis
-
-    fx1 = tiklsoF(x1)
-    fx2 = tiklsoF(x2)
-
+    fx1 = f(x1)
+    fx2 = f(x2)
+    
     iteracijos = 0
+    tarpiniai_t = []
     while True:
         iteracijos += 1
+        
+        tarpiniai_t.append((x1, fx1))
+        tarpiniai_t.append((x2, fx2))
+        
         if fx1 > fx2:
             l = x1
             ilgis = r - l
-
             x1 = x2
             fx1 = fx2
             x2 = l + phi * ilgis
-            fx2 = tiklsoF(x2)
+            fx2 = f(x2)
         else:
             r = x2
             ilgis = r - l
-
             x2 = x1
             fx2 = fx1
             x1 = r - phi * ilgis
-            fx1 = tiklsoF(x1)
-
+            fx1 = f(x1)
+            
         if ilgis < epsilon:
             break
-
-    if fx1 < fx2: ats = (x1, fx1)
-    else: ats = (x2, fx2)
-
-    print(f"Auksinio pjūvio metodo alogritmas rado atsakymą per {iteracijos} iteracijas.")
+    
+    if fx1 < fx2:
+        ats = (x1, fx1)
+    else:
+        ats = (x2, fx2)
+    
+    print(f"Auksinio pjūvio metodo algoritmas rado atsakymą per {iteracijos} iteracijas.")
     print(f"su ε = {epsilon}, ats.: {ats[1]}")
+    print(f"tiklsoF() buvo iškviestas {f_kvietimai} kartų.")
+    print()
+    
+    for pt in tarpiniai_t:
+        pl.plot(pt[0], pt[1], 'xm')
     pl.plot(ats[0], ats[1], 'og')
 
 def niutonoMetodas():
     global intervalas, epsilon
-    x = (intervalas[0] + intervalas[1]) / 2
-    iteracijos = 0
+    f_kvietimai = 0
+    fdx_kvietimai = 0
+    f2dx_kvietimai = 0
     
+    def f(x):
+        nonlocal f_kvietimai
+        f_kvietimai += 1
+        return tiklsoF(x)
+    
+    def f_dx(x):
+        nonlocal fdx_kvietimai
+        fdx_kvietimai += 1
+        return tiklsoF_dx(x)
+    
+    def f_2dx(x):
+        nonlocal f2dx_kvietimai
+        f2dx_kvietimai += 1
+        return tiklsoF_2dx(x)
+    
+    x = (copy.deepcopy(intervalas[0]) + copy.deepcopy(intervalas[1])) / 2
+    iteracijos = 0
+    tarpiniai_t = []
     while True:
         iteracijos += 1
-        f_prime = tiklsoF_dx(x)
-        f_double_prime = tiklsoF_2dx(x)
+        tarpiniai_t.append((x, f(x)))
+        fprime = f_dx(x)
+        fdouble = f_2dx(x)
         
-        if abs(f_prime) < epsilon:
+        if abs(fprime) < epsilon:
             break
         
-        x = x - f_prime / f_double_prime
+        x = x - fprime / fdouble
     
-    print(f"Niutono metodo alogritmas rado atsakymą per {iteracijos} iteracijas.")
-    print(f"su ε = {epsilon}, ats.: {tiklsoF(x)}")
-    pl.plot(x, tiklsoF(x), 'og')
+    print(f"Niutono metodo algoritmas rado atsakymą per {iteracijos} iteracijas.")
+    print(f"su ε = {epsilon}, ats.: {tarpiniai_t[-1][1]}")
+    print(f"tiklsoF() buvo iškviestas {f_kvietimai} kartų, tiklsoF_dx() {fdx_kvietimai} kartų, tiklsoF_2dx() {f2dx_kvietimai} kartų.")
+    
+    for pt in tarpiniai_t:
+        pl.plot(pt[0], pt[1], 'xy')
+    pl.plot(x, tarpiniai_t[-1][1], 'ob')
 
 x = np.arange(intervalas[0], intervalas[1], 0.1)
-pl.plot(x, tiklsoF(x))
 
+pl.plot(x, tiklsoF(x), 'k-')
 dalijimoPusiau()
-auksinioPjuvio()
-niutonoMetodas()
+pl.show()
 
+pl.plot(x, tiklsoF(x), 'k-')
+auksinioPjuvio()
+pl.show()
+
+pl.plot(x, tiklsoF(x), 'k-')
+niutonoMetodas()
 pl.show()
