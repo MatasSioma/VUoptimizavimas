@@ -5,8 +5,14 @@ import copy, math
 
 # f(x) = (x^2−a)^2/b−1 -> (x^2)^2/4−1
 def tiklsoF(x):
-    # return pow(pow(x, 2), 2) / 3
-    return pow(pow(x, 2) - 8, 2) / 7 #pvz su kitais a, b
+    return (x**4) / 3
+    # return pow(pow(x, 2) - 8, 2) / 7 #pvz su kitais a, b
+
+def tiklsoF_dx(x):
+    return (4 * x**3) / 3
+
+def tiklsoF_2dx(x):
+    return 4 * x**2
 
 while True:
     try:
@@ -94,11 +100,30 @@ def auksinioPjuvio():
     print(f"su ε = {epsilon}, ats.: {ats[1]}")
     pl.plot(ats[0], ats[1], 'og')
 
+def niutonoMetodas():
+    global intervalas, epsilon
+    x = (intervalas[0] + intervalas[1]) / 2
+    iteracijos = 0
+    
+    while True:
+        iteracijos += 1
+        f_prime = tiklsoF_dx(x)
+        f_double_prime = tiklsoF_2dx(x)
+        
+        if abs(f_prime) < epsilon:
+            break
+        
+        x = x - f_prime / f_double_prime
+    
+    print(f"Niutono metodo alogritmas rado atsakymą per {iteracijos} iteracijas.")
+    print(f"su ε = {epsilon}, ats.: {tiklsoF(x)}")
+    pl.plot(x, tiklsoF(x), 'og')
 
 x = np.arange(intervalas[0], intervalas[1], 0.1)
 pl.plot(x, tiklsoF(x))
 
 dalijimoPusiau()
 auksinioPjuvio()
+niutonoMetodas()
 
 pl.show()
