@@ -7,12 +7,15 @@ import copy, math
 def tiklsoF(x):
     return (x**4) / 4 - 1
     # return pow(pow(x, 2) - 8, 2) / 7 #pvz su kitais a, b
+    # return (100 - x)**2
 
 def tiklsoF_dx(x):
     return x**3
+    # return 2*(100 - x) - 1
 
 def tiklsoF_2dx(x):
     return 3 * x**2
+    # return -2
 
 while True:
     try:
@@ -69,7 +72,7 @@ def dalijimoPusiau():
 
     print()
     print(f"Dalijimo pusiau metodo algoritmas rado atsakymą per {iteracijos} iteracijas.")
-    print(f"su ε = {epsilon}, ats.: {fxm}")
+    print(f"su ε = {epsilon}, ats.: ({xm}, {fxm})")
     print(f"tiklsoF() buvo iškviestas {f_kvietimai} kartų.")
     
     for pt in tarpiniai_t:
@@ -128,7 +131,7 @@ def auksinioPjuvio():
     
     print()
     print(f"Auksinio pjūvio metodo algoritmas rado atsakymą per {iteracijos} iteracijas.")
-    print(f"su ε = {epsilon}, ats.: {ats[1]}")
+    print(f"su ε = {epsilon}, ats.: ({ats[0]}, {ats[1]})")
     print(f"tiklsoF() buvo iškviestas {f_kvietimai} kartų.")
     
     for pt in tarpiniai_t:
@@ -172,7 +175,7 @@ def niutonoMetodas():
     
     print()
     print(f"Niutono metodo algoritmas rado atsakymą per {iteracijos} iteracijas.")
-    print(f"su ε = {epsilon}, ats.: {tarpiniai_t[-1][1]}")
+    print(f"su ε = {epsilon}, ats.: ({tarpiniai_t[-1][0]}, {tarpiniai_t[-1][1]})")
     print(f"tiklsoF() buvo iškviestas {f_kvietimai} kartų, tiklsoF_dx() {fdx_kvietimai} kartų, tiklsoF_2dx() {f2dx_kvietimai} kartų.")
     
     for pt in tarpiniai_t:
