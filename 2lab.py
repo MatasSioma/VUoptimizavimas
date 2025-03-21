@@ -15,23 +15,40 @@ def tikslo_fg(X):
     return np.array([dfda, dfdb])
 
 def gradiento(X0, gamma):
+    f_kvietimai = 0
+    fg_kvietimai = 0
+    def f(x):
+        nonlocal f_kvietimai
+        f_kvietimai += 1
+        return tikslo_f(x)
+    def fg(x):
+        nonlocal fg_kvietimai
+        fg_kvietimai += 1
+        return tikslo_fg(x)
+    
     Xi = np.array(copy.deepcopy(X0), dtype=float)
     i = 0
     kelias = [Xi.copy()]
-    gradientas = tikslo_fg(Xi)
+    gradientas = fg(Xi)
     while True:
         Xi = Xi - gamma * gradientas
         i += 1
         kelias.append(Xi)
-        gradientas = tikslo_fg(Xi)
+        gradientas = fg(Xi)
         if abs(np.linalg.norm(gradientas)) < epsilon:
             break
     
-    return Xi, tikslo_f(Xi), i, np.array(kelias)
+    return Xi, f(Xi), i, np.array(kelias), f_kvietimai + fg_kvietimai
 
 
 def min_gamma(Xi, gradientas):
-    t_f = lambda gamma: tikslo_f(Xi - gamma * gradientas)
+    f_kvietimai = 0
+    def f(x):
+        nonlocal f_kvietimai
+        f_kvietimai += 1
+        return tikslo_f(x)
+
+    t_f = lambda gamma: f(Xi - gamma * gradientas)
     l = 0
     r = 25
     xm = (l + r) / 2
@@ -63,7 +80,7 @@ def min_gamma(Xi, gradientas):
         if ilgis < epsilon:
             break
     
-    return xm #gamma kur f min
+    return xm, f_kvietimai #gamma kur f min
 
 def greiciausias(X0):
     Xi = np.array(copy.deepcopy(X0), dtype=float)
