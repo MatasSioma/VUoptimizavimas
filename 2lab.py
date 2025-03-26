@@ -138,9 +138,9 @@ def simplex(X0, alpha=0.1, beta=0.5, gamma=2.0, niu=-0.5):
     iterations = 0
     while True:
         iterations += 1
-        sorted_indices = np.argsort(f_values)
-        simplex = [simplex[i] for i in sorted_indices]
-        f_values = [f_values[i] for i in sorted_indices]
+        indeksai = np.argsort(f_values)
+        simplex = [simplex[i] for i in indeksai]
+        f_values = [f_values[i] for i in indeksai]
 
         Xl, Xg, Xh = simplex[0], simplex[-2], simplex[-1]
         fl, fg, fh = f_values[0], f_values[-2], f_values[-1]
