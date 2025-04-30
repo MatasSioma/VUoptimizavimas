@@ -193,3 +193,5 @@ for Xpr in [np.array([0, 0]), np.array([1, 1]), np.array([0, 0.4])]: #2314004 - 
     plt.plot(np.clip(kelias[:, 0], 0, 0.59), np.clip(kelias[:, 1], 0, 0.59), marker='o', label=f'Deformuojamas simpleksas X0: ({Xpr[0]}, {Xpr[1]})')
     plt.legend()
     plt.show()
+
+    print("\n------------------------------------------------------------------")
