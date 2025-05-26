@@ -98,7 +98,7 @@ def greiciausias(X0):
         f_kvietimai += f_gamma
         while True:
             Xi = Xi - gamma * gradientas
-            if Xi[0] < 0 and Xi[1] < 0:
+            if Xi[0] < 0 or Xi[1] < 0:
                 Xi = Xi + gamma * gradientas
                 gamma /= 2
                 continue

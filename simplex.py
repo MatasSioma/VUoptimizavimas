@@ -1,6 +1,5 @@
 import numpy as np
 
-
 def simplex(X0, tikslo_f, r, epsilon, alpha=0.1, beta=0.5, gamma=2.0, niu=-0.5):
     n = len(X0)
     simplex = [X0]
