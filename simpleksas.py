@@ -10,46 +10,46 @@ def simplex(a, b, c):
         a = np.hstack((a, B))
 
     # Sukūriame pradinę simplekso lentelę įrašant masyvus vertikaliai
-    lentele = np.vstack((
+    table = np.vstack((
         np.array([None] + [0] + list(c) + [0] * len(a)), # Pirmoji eilutė yra tikslinės funkcijos koeficientai
-        np.hstack((np.transpose([baze]), np.transpose([b]), a)) # Likusios eilės yra apribojimai ir kintamieji
+        np.hstack((np.transpose([baze]), np.transpose([b]), a)) # Likusios eilėtės yra apribojimai ir kintamieji
     ))
 
 
     iteracijos = 0
-    while not np.all(lentele[0, 2:] >= 0):
-        tikslo_funkcijos_koeficientai = lentele[0, 2:]
+    while not np.all(table[0, 2:] >= 0):
+        tikslo_funkcijos_koeficientai = table[0, 2:]
         ieinancio_kintamojo_indeksas = np.argmin(tikslo_funkcijos_koeficientai) + 2
 
-        loginis_masyvas = lentele[:, ieinancio_kintamojo_indeksas] > 0
-        pasirinktos_eilutes = lentele[loginis_masyvas]
+        loginis_table = table[:, ieinancio_kintamojo_indeksas] > 0
+        pasirinktos_eilutes = table[loginis_table]
 
-        minimalus_indeksas = np.argmin(pasirinktos_eilutes[:, 1] / pasirinktos_eilutes[:, ieinancio_kintamojo_indeksas])
-        iseinanti_eilute = np.nonzero(loginis_masyvas)[0][minimalus_indeksas]
+        min_indeksas = np.argmin(pasirinktos_eilutes[:, 1] / pasirinktos_eilutes[:, ieinancio_kintamojo_indeksas])
+        iseinanti_eilute = np.nonzero(loginis_table)[0][min_indeksas]
 
 
-        atraminis = lentele[iseinanti_eilute, ieinancio_kintamojo_indeksas]
-        lentele[iseinanti_eilute, 1:] /= atraminis
+        atraminis = table[iseinanti_eilute, ieinancio_kintamojo_indeksas]
+        table[iseinanti_eilute, 1:] /= atraminis
 
-        neiseinancios_eilutes = np.arange(len(lentele)) != iseinanti_eilute
+        neiseinancios_eilutes = np.arange(len(table)) != iseinanti_eilute
 
-        atraminis_faktorius = lentele[neiseinancios_eilutes, ieinancio_kintamojo_indeksas] / lentele[iseinanti_eilute, ieinancio_kintamojo_indeksas] / lentele[iseinanti_eilute, ieinancio_kintamojo_indeksas]
+        atraminis_faktorius = table[neiseinancios_eilutes, ieinancio_kintamojo_indeksas] / table[iseinanti_eilute, ieinancio_kintamojo_indeksas] / table[iseinanti_eilute, ieinancio_kintamojo_indeksas]
         atraminis_faktorius = atraminis_faktorius[:, np.newaxis]
 
-        lentele[neiseinancios_eilutes, 1:] -= atraminis_faktorius * lentele[iseinanti_eilute, 1:]
+        table[neiseinancios_eilutes, 1:] -= atraminis_faktorius * table[iseinanti_eilute, 1:]
 
-        lentele[iseinanti_eilute, 0] = ieinancio_kintamojo_indeksas - 2
+        table[iseinanti_eilute, 0] = ieinancio_kintamojo_indeksas - 2
 
         iteracijos += 1
 
-    optimalus_sprendinys = np.zeros(len(lentele[0, 2:]))
-    indeksai = np.arange(1, len(lentele))
+    optimalus_sprendinys = np.zeros(len(table[0, 2:]))
+    indeksai = np.arange(1, len(table))
 
-    geri_indeksai = np.logical_and(lentele[indeksai, 0] < len(lentele[0, 2:]), lentele[indeksai, 0] != None)
-    sprendimo_kintamuju_indeksai = lentele[indeksai[geri_indeksai], 0].astype(int)
-    optimalus_sprendinys[sprendimo_kintamuju_indeksai] = lentele[indeksai[geri_indeksai], 1]
+    geri_indeksai = np.logical_and(table[indeksai, 0] < len(table[0, 2:]), table[indeksai, 0] != None)
+    sprendimo_kintamuju_indeksai = table[indeksai[geri_indeksai], 0].astype(int)
+    optimalus_sprendinys[sprendimo_kintamuju_indeksai] = table[indeksai[geri_indeksai], 1]
 
-    optimali_reiksme = -1 * lentele[0, 1]
+    optimali_reiksme = -1 * table[0, 1]
 
     bazes_indeksai = np.where(optimalus_sprendinys != 0)[0] + 1
 
