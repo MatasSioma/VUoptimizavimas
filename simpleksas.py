@@ -51,6 +51,7 @@ def simplex(a, b, c):
 
     optimali_reiksme = -1 * table[0, 1]
 
-    bazes_indeksai = np.where(optimalus_sprendinys != 0)[0] + 1
+    bazes_indeksai = table[1:, 0].astype(int) + 1
+    # bazes_indeksai = np.where(optimalus_sprendinys != 0)[0] + 1
 
     return optimali_reiksme, optimalus_sprendinys, bazes_indeksai

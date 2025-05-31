@@ -26,6 +26,6 @@ print(f'Bazė:', " ".join(map(str, base_ind)))
 
 print()
 
-print("=== Palyginimas ===")
+print("Palyginimas:")
 print(f"Pradinis:   min Z = {val_pr:.2f}, x = {point_pr}")
 print(f"Individualus: min Z = {val_ind:.2f}, x = {point_ind}")
